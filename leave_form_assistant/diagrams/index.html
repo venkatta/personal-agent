@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Form Assistant - Architecture & Diagrams</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .diagram-section {
+            display: none;
+        }
+        
+        .diagram-section.active {
+            display: block;
+        }
+        
+        .diagram-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .diagram-section p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .mermaid {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .feature-card p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            border-top: 2px solid #dee2e6;
+        }
+        
+        .description-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .description-box strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Leave Form Assistant</h1>
+            <p>CrewAI-based Leave Form Fulfillment System</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showDiagram('overview')">Overview</button>
+            <button class="nav-btn" onclick="showDiagram('architecture')">Architecture</button>
+            <button class="nav-btn" onclick="showDiagram('main-flow')">Main Flow</button>
+            <button class="nav-btn" onclick="showDiagram('ui-flow')">UI Flow</button>
+            <button class="nav-btn" onclick="showDiagram('agent-sequence')">Agent Sequence</button>
+            <button class="nav-btn" onclick="showDiagram('validation')">Validation Flow</button>
+        </nav>
+        
+        <div class="content">
+            <!-- Overview Section -->
+            <div id="overview" class="diagram-section active">
+                <h2>📋 System Overview</h2>
+                
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>🔍 Intent Recognition</h3>
+                        <p>Understands user's intention and guides them through the process</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📝 Smart Extraction</h3>
+                        <p>Extracts form fields from natural language conversation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>✓ Validation Engine</h3>
+                        <p>Comprehensive validation with clear error messages</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💬 Smart Responses</h3>
+                        <p>Empathetic communication and guidance throughout process</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>✅ Confirmation</h3>
+                        <p>Complete form review and user confirmation before submission</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 Progress Tracking</h3>
+                        <p>Real-time progress percentage and completion status</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 40px; color: #333;">Key Features:</h3>
+                <div class="description-box">
+                    <strong>✓ Multi-Agent Architecture:</strong> Separate agents for intent, extraction, validation, response, and confirmation
+                </div>
+                <div class="description-box">
+                    <strong>✓ Conversational UI:</strong> Natural language interaction using CrewAI agents and LLM
+                </div>
+                <div class="description-box">
+                    <strong>✓ Robust Validation:</strong> Business rules enforcement with helpful error messages
+                </div>
+                <div class="description-box">
+                    <strong>✓ Field Extraction:</strong> Intelligent parsing of user input using regex and NLP
+                </div>
+                <div class="description-box">
+                    <strong>✓ Error Handling:</strong> Graceful handling of validation errors with user-friendly guidance
+                </div>
+                <div class="description-box">
+                    <strong>✓ Complete Workflow:</strong> From intent understanding to form submission confirmation
+                </div>
+            </div>
+
+            <!-- Architecture Section -->
+            <div id="architecture" class="diagram-section">
+                <h2>🏗️ System Architecture</h2>
+                <p>The system is organized in multiple layers for scalability and maintainability</p>
+                <div class="mermaid">
+graph TB
+    subgraph "User Interface Layer"
+        UI["Chat Interface / API"]
+    end
+
+    subgraph "Application Layer"
+        MAIN["Main Application<br/>LeaveFormAssistant"]
+        CREW["Crew Orchestrator<br/>LeaveFormCrew"]
+    end
+
+    subgraph "Agent Layer"
+        INTENT["Intent Agent<br/>Understand user intent"]
+        EXTRACT["Extraction Agent<br/>Parse form fields"]
+        VALIDATE["Validation Agent<br/>Check inputs"]
+        RESPONSE["Response Agent<br/>Communicate issues"]
+        CONFIRM["Confirmation Agent<br/>Review & confirm"]
+    end
+
+    subgraph "Tools & Models Layer"
+        EXTRACTOR["Content Extractor<br/>Regex patterns"]
+        VALIDATOR["Form Validator<br/>Business rules"]
+        MODELS["Data Models<br/>Pydantic schemas"]
+    end
+
+    subgraph "Data Storage"
+        FORMDATA["Form Data<br/>In-memory cache"]
+        HISTORY["Conversation History<br/>Audit trail"]
+    end
+
+    subgraph "LLM Integration"
+        LLM["Language Model<br/>GPT-4 / Claude"]
+    end
+
+    UI -->|User Input| MAIN
+    MAIN -->|Process| CREW
+    
+    CREW -->|Task 1| INTENT
+    CREW -->|Task 2| EXTRACT
+    CREW -->|Task 3| VALIDATE
+    CREW -->|Task 4| RESPONSE
+    CREW -->|Task 5| CONFIRM
+    
+    INTENT -->|Uses| LLM
+    RESPONSE -->|Uses| LLM
+    CONFIRM -->|Uses| LLM
+    
+    EXTRACT -->|Uses| EXTRACTOR
+    VALIDATE -->|Uses| VALIDATOR
+    EXTRACT -->|Uses| MODELS
+    VALIDATE -->|Uses| MODELS
+    
+    CREW -->|Read/Write| FORMDATA
+    CREW -->|Append| HISTORY
+    
+    CREW -->|Response| MAIN
+    MAIN -->|Display| UI
+                </div>
+                <div class="description-box">
+                    <strong>Layers:</strong><br>
+                    • <strong>UI Layer:</strong> Chat interface or API endpoint<br>
+                    • <strong>Application Layer:</strong> Main app and crew orchestrator<br>
+                    • <strong>Agent Layer:</strong> Five specialized agents<br>
+                    • <strong>Tools Layer:</strong> Extraction, validation, data models<br>
+                    • <strong>Storage:</strong> Form data and conversation history<br>
+                    • <strong>LLM Integration:</strong> Language model for NLP tasks
+                </div>
+            </div>
+
+            <!-- Main Flow Section -->
+            <div id="main-flow" class="diagram-section">
+                <h2>🚀 Main Processing Flow</h2>
+                <p>Step-by-step flow from initial contact to final submission</p>
+                <div class="mermaid">
+flowchart TD
+    Start([User Starts Form]) --> Greeting["🎯 Display Welcome<br/>Message & Instructions"]
+    
+    Greeting --> Input["⌨️ User Provides<br/>Information"]
+    
+    Input --> Intent{"🔍 Recognize<br/>Intent"}
+    
+    Intent -->|New Submission| Extract["📝 Extract Form<br/>Fields from Input"]
+    Intent -->|Help/Clarification| Help["❓ Provide<br/>Guidance"]
+    Intent -->|Other| Other["↩️ Route to<br/>Appropriate Path"]
+    
+    Help --> Input
+    Other --> Input
+    
+    Extract --> UpdateForm["💾 Update Form<br/>Data Object"]
+    
+    UpdateForm --> CalcCompletion["📊 Calculate<br/>Completion %"]
+    
+    CalcCompletion --> ShouldValidate{"Enough Data<br/>to Validate?"}
+    
+    ShouldValidate -->|No| NeedMore["❓ Ask for Missing<br/>Required Fields"]
+    ShouldValidate -->|Yes| Validate["✓ Validate All<br/>Form Fields"]
+    
+    NeedMore --> Input
+    
+    Validate --> HasErrors{"❌ Validation<br/>Errors?"}
+    
+    HasErrors -->|Yes| ErrorResponse["⚠️ Display Error<br/>Messages & Solutions"]
+    HasErrors -->|No| HasWarnings{"⚠️ Validation<br/>Warnings?"}
+    
+    ErrorResponse --> Input
+    
+    HasWarnings -->|Yes| WarningResponse["⚡ Display Warnings<br/>& Ask to Proceed"]
+    HasWarnings -->|No| IsComplete{"✓ All Required<br/>Fields Complete?"}
+    
+    WarningResponse --> ProceedChoice{"User Wants<br/>to Proceed?"}
+    ProceedChoice -->|Edit| Input
+    ProceedChoice -->|Proceed| IsComplete
+    
+    IsComplete -->|No| NeedMore
+    IsComplete -->|Yes| FormSummary["📋 Generate Form<br/>Summary"]
+    
+    FormSummary --> DisplaySummary["📺 Display Complete<br/>Form to User"]
+    
+    DisplaySummary --> ConfirmIntent{"User Action<br/>?"}
+    
+    ConfirmIntent -->|Confirm| Submit["📤 Submit Form<br/>& Generate Reference ID"]
+    ConfirmIntent -->|Edit| EditField["✏️ Allow User to<br/>Edit Specific Field"]
+    ConfirmIntent -->|Cancel| Cancel["❌ Cancel Form<br/>& Clear Data"]
+    
+    EditField --> UpdateForm
+    
+    Cancel --> CancelMsg["Goodbye Message<br/>& Option to Restart"]
+    CancelMsg --> Start
+    
+    Submit --> SubmitSuccess["✅ Display Success<br/>Message with<br/>Reference ID"]
+    
+    SubmitSuccess --> NextSteps["📌 Show Next Steps<br/>& Support Info"]
+    
+    NextSteps --> End([End Session])
+    
+    style Start fill:#90EE90
+    style End fill:#FFB6C1
+    style Submit fill:#87CEEB
+    style Cancel fill:#FFD700
+    style ErrorResponse fill:#FF6B6B
+    style WarningResponse fill:#FFA500
+    style FormSummary fill:#DDA0DD
+    style SubmitSuccess fill:#90EE90
+                </div>
+            </div>
+
+            <!-- UI Flow Section -->
+            <div id="ui-flow" class="diagram-section">
+                <h2>💻 UI State Management Flow</h2>
+                <p>State transitions and data flow through the application</p>
+                <div class="mermaid">
+flowchart LR
+    subgraph "User Journey"
+        A["👤 User"]
+        B["💬 Chat Message"]
+        C["🤖 Assistant Response"]
+    end
+    
+    subgraph "Form State Machine"
+        S1["State: INITIAL"]
+        S2["State: COLLECTING"]
+        S3["State: COMPLETED"]
+        S4["State: CONFIRMING"]
+        S5["State: SUBMITTED"]
+        S6["State: ERROR"]
+    end
+    
+    subgraph "Data Flow"
+        D1["Raw User Input"]
+        D2["Extracted Fields"]
+        D3["Validated Data"]
+        D4["Form Summary"]
+    end
+    
+    A -->|Type| B
+    B -->|Process| D1
+    D1 -->|Extract| D2
+    D2 -->|Validate| D3
+    D3 -->|Summarize| D4
+    D4 -->|Generate| C
+    C -->|Display| A
+    
+    S1 -->|Form Started| S2
+    S2 -->|Extracting Data| S2
+    S2 -->|All Data Collected| S3
+    S3 -->|Display Summary| S4
+    S4 -->|User Confirms| S5
+    S4 -->|Validation Fails| S6
+    S6 -->|Correct & Retry| S2
+    S5 -->|Complete| End([✅ Done])
+    
+    style A fill:#E8F4F8
+    style S5 fill:#90EE90
+    style S6 fill:#FF6B6B
+                </div>
+            </div>
+
+            <!-- Agent Sequence Section -->
+            <div id="agent-sequence" class="diagram-section">
+                <h2>🤝 Agent Interaction Sequence</h2>
+                <p>How agents interact during form processing</p>
+                <div class="mermaid">
+sequenceDiagram
+    participant User as 👤 User
+    participant Main as 🎯 Main App
+    participant Crew as 🚀 Crew
+    participant Intent as 🔍 Intent Agent
+    participant Extract as 📝 Extract Agent
+    participant Validate as ✓ Validate Agent
+    participant Response as 💬 Response Agent
+    participant Confirm as ✅ Confirm Agent
+
+    User->>Main: Send Message
+    Main->>Crew: process_user_input()
+    
+    Crew->>Intent: recognize_intent()
+    Intent-->>Crew: intent result
+    
+    Crew->>Extract: extract_content()
+    Extract-->>Crew: extracted fields
+    
+    Crew->>Crew: update form_data
+    Crew->>Crew: calculate_completion
+    
+    alt Has content to validate
+        Crew->>Validate: validate_form()
+        Validate-->>Crew: validation result
+        
+        alt Has errors
+            Crew->>Response: generate_error_response()
+            Response-->>Crew: error message
+        else Form complete
+            Crew->>Confirm: generate_confirmation_prompt()
+            Confirm-->>Crew: confirmation UI
+        else Missing fields
+            Crew->>Response: generate_clarification_request()
+            Response-->>Crew: clarification message
+        end
+    end
+    
+    Crew-->>Main: response + form_state
+    Main-->>User: Display Response
+    
+    alt User confirms
+        User->>Main: Confirm submission
+        Main->>Crew: confirm_submission()
+        Crew->>Confirm: generate_confirmation_success()
+        Confirm-->>Crew: success message
+        Crew-->>Main: submission status
+        Main-->>User: Success + Reference ID
+    end
+                </div>
+            </div>
+
+            <!-- Validation Flow Section -->
+            <div id="validation" class="diagram-section">
+                <h2>✓ Validation Flow</h2>
+                <p>Field-by-field validation with error and warning handling</p>
+                <div class="mermaid">
+graph TD
+    Input["📥 Form Input<br/>Data"] --> Val1{"Employee ID<br/>Valid?"}
+    
+    Val1 -->|No| Err1["❌ Error:<br/>Invalid Format"]
+    Val1 -->|Yes| Val2{"Name<br/>Valid?"}
+    
+    Err1 --> Errors["🔴 Collect<br/>Errors"]
+    
+    Val2 -->|No| Err2["❌ Error:<br/>Too Short"]
+    Val2 -->|Yes| Val3{"Email<br/>Valid?"}
+    
+    Err2 --> Errors
+    
+    Val3 -->|No| Err3["❌ Error:<br/>Invalid Format"]
+    Val3 -->|Yes| Val4{"Department<br/>Valid?"}
+    
+    Err3 --> Errors
+    
+    Val4 -->|No| Err4["❌ Error:<br/>Not in List"]
+    Val4 -->|Yes| Val5{"Dates<br/>Valid?"}
+    
+    Err4 --> Errors
+    
+    Val5 -->|No| Err5["❌ Error:<br/>Date Issues"]
+    Val5 -->|Yes| Warn1{"Duration<br/>> 30 Days?"}
+    
+    Err5 --> Errors
+    
+    Warn1 -->|Yes| Warn["🟡 Warning:<br/>Manager Approval<br/>Required"]
+    Warn1 -->|No| Val6{"Reason<br/>Valid?"}
+    
+    Val6 -->|No| Err6["❌ Error:<br/>Reason Too Short"]
+    Val6 -->|Yes| Success["✅ All Valid"]
+    
+    Err6 --> Errors
+    
+    Warn --> Warnings["🟡 Collect<br/>Warnings"]
+    Warnings --> Success
+    
+    Errors --> Result["📊 Validation<br/>Result"]
+    Success --> Result
+    
+    Result --> Decision{"Has<br/>Errors?"}
+    
+    Decision -->|Yes| Reject["❌ Reject Form<br/>Ask for Corrections"]
+    Decision -->|No| Accept["✅ Accept Form<br/>Proceed to<br/>Confirmation"]
+    
+    Reject --> Input
+    Accept --> Confirm["Confirm with User"]
+    
+    style Success fill:#90EE90
+    style Reject fill:#FF6B6B
+    style Warn fill:#FFA500
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2024 Leave Form Assistant - Powered by CrewAI | Built with ❤️ for Employee Efficiency</p>
+        </footer>
+    </div>
+    
+    <script>
+        function showDiagram(diagramId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.diagram-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Hide all nav buttons active state
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // Show selected section and mark button as active
+            document.getElementById(diagramId).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Re-render mermaid diagrams
+            mermaid.contentLoaded();
+        }
+        
+        // Initialize mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+        mermaid.contentLoaded();
+    </script>
+</body>
+</html>
