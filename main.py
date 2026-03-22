@@ -3,6 +3,10 @@ Leave Form Assistant - Main Application
 Entry point for the leave form fulfillment system
 """
 
+import sys
+import io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
 from typing import Optional, Dict, Any
 import json
 from crew import LeaveFormCrew
@@ -22,12 +26,12 @@ class LeaveFormAssistant:
         greeting = """
 🎯 Welcome to the Leave Form Assistant!
 
-I'm here to help you submit your leave request quickly and easily.
+I'm here to capture your leave window quickly and accurately.
 
 Please tell me:
-• What type of leave you're requesting?
-• When do you need the leave? (dates)
-• Any other relevant details about your request
+• What type of leave you're requesting
+• The leave start date and time
+• The leave end date and time
 
 Just share the information in your own words, and I'll guide you through the rest!
 
@@ -138,12 +142,7 @@ if __name__ == "__main__":
     
     # Simulate user interactions
     user_inputs = [
-        "Hi, I need to apply for casual leave",
-        "My employee ID is EMP-001, name is John Doe",
-        "I'm from the Engineering department",
-        "I need leave from 20-03-2026 to 24-03-2026",
-        "The reason is personal family matters",
-        "My email is john.doe@company.com and my manager is Jane Smith"
+        "Hi, I need annual leave from 25-03-2026 09:00 to 26-03-2026 18:00",
     ]
     
     for user_input in user_inputs:

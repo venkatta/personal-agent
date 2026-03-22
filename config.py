@@ -25,40 +25,23 @@ CONFIG = {
         "Bereavement Leave"
     ],
     
-    "departments": [
-        "Engineering",
-        "Sales",
-        "HR",
-        "Finance",
-        "Marketing",
-        "Operations",
-        "Other"
-    ],
-    
     # Validation rules
     "validation": {
         "max_leave_days": 60,
-        "min_reason_length": 5,
-        "max_reason_length": 500,
         "approval_threshold_days": 30,  # Days beyond which manager approval required
     },
     
     # Form fields
     "required_fields": [
-        "employee_id",
-        "employee_name",
-        "department",
         "leave_type",
         "start_date",
+        "start_time",
         "end_date",
-        "reason",
-        "contact_email",
-        "manager_name"
+        "end_time"
     ],
     
     "optional_fields": [
-        "contact_phone",
-        "cover_details"
+        "validation_errors"
     ],
     
     # LLM Configuration

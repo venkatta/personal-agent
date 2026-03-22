@@ -37,23 +37,12 @@ class ConfirmationAgent:
                 📋 LEAVE REQUEST FORM SUMMARY
                 ══════════════════════════════
                 
-                👤 EMPLOYEE INFORMATION
-                ├─ Employee ID: [ID]
-                ├─ Full Name: [Name]
-                ├─ Department: [Dept]
-                └─ Manager: [Manager Name]
-                
                 📅 LEAVE DETAILS
                 ├─ Leave Type: [Type]
                 ├─ Start Date: [Date]
+                ├─ Start Time: [Time]
                 ├─ End Date: [Date]
-                ├─ Total Days: [Days]
-                └─ Reason: [Reason]
-                
-                📞 CONTACT INFORMATION
-                ├─ Email: [Email]
-                ├─ Phone: [Phone]
-                └─ Coverage: [Coverage Details]
+                └─ End Time: [Time]
                 
                 ✅ STATUS: All information validated and complete
                 

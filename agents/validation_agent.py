@@ -32,25 +32,12 @@ class ValidationAgent:
             description=dedent("""
                 Validate all form fields against the following rules:
                 
-                Employee Information:
-                - Employee ID: 2-20 characters, uppercase letters, numbers, or hyphens
-                - Employee Name: 2-100 characters, letters/spaces/hyphens/apostrophes
-                - Manager Name: 2-100 characters, letters/spaces/hyphens/apostrophes
-                - Department: Must be from (Engineering, Sales, HR, Finance, Marketing, Operations, Other)
-                
-                Contact Information:
-                - Email: Valid email format
-                - Phone (optional): If provided, valid phone format
-                
                 Leave Details:
-                - Leave Type: Must be valid (Sick Left, Casual, Earned, Maternity, Paternity, Unpaid, Bereavement)
-                - Start Date: Must be in the future (not past)
-                - End Date: Must be after start date
+                - Leave Type: Must be valid (annual, medical, maternity, paternity, child_care, compassionate, exam, family_care, hospitalisation, national_service, extended_maternity, shared_parental, adoption_4_weeks, adoption_8_weeks, sick_leave_no_medical_certificate, special, time_off, unpaid_infant_care, unpaid_medical, unpaid_maternity, marriage, unpaid_leave, unpaid_hours)
+                - Start Date and Start Time: Combined start must be in the future
+                - End Date and End Time: Combined end must be after the combined start
                 - Leave Duration: Cannot exceed 60 days
                 - WARNING if duration > 30 days: Requires manager approval
-                
-                Reason:
-                - Reason: 5-500 characters
                 
                 For each violation, provide:
                 - Field name
@@ -114,7 +101,7 @@ class ValidationAgent:
                 3. Errors Found: Count and list (if any)
                 4. Warnings Found: Count and list (if any)
                 5. Action Items: What needs to be done next
-                6. Approval Requirements: Any special approvals needed
+                6. Leave Window: Show the validated start and end schedule
                 
                 Format it in a clear, scannable way.
             """),

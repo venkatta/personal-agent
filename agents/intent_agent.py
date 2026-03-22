@@ -60,8 +60,8 @@ class IntentAgent:
                 Include:
                 1. A warm greeting
                 2. Confirmation of their intent
-                3. List of required fields (Employee ID, Name, Department, Leave Type, Dates, Reason, etc.)
-                4. Optional fields
+                3. List of required fields (Leave Type, Start Date, Start Time, End Date, End Time)
+                4. Mention that validation errors will be shown automatically if needed
                 5. Timeline expectations
                 6. Assurance that the process is simple and can be done step by step
             """),

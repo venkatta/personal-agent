@@ -5,7 +5,7 @@ Tasks module for Leave Form Assistant
 # To be used with CrewAI for defining task workflows
 # Import agent classes as needed
 
-from leave_form_assistant.agents import (
+from agents import (
     IntentAgent,
     ExtractionAgent,
     ValidationAgent,

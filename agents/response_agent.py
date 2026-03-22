@@ -60,14 +60,13 @@ class ResponseAgent:
                 1. Keep it natural and conversational
                 2. Ask 1-2 fields at a time maximum
                 3. Show examples for complex fields
-                4. For dates, explain the format expected
-                5. For text fields, give character limits if relevant
-                6. For selections, list available options
-                7. Make it clear what's optional vs required
+                4. For dates and times, explain the format expected
+                5. For selections, list available options
+                6. Make it clear what's required before validation can run
                 
                 Example tone:
-                "I have your basic info! Just need a couple more details...
-                Could you tell me your department? (We have: Engineering, Sales, HR, Finance, Marketing, Operations, or Other)"
+                "I have your leave type. Just need the schedule details now.
+                Could you share the start time as well? For example: 09:00 or 9 AM."
             """),
             expected_output="Conversational clarification request",
             agent=agent,
@@ -107,8 +106,8 @@ class ResponseAgent:
                 4. Ask for next missing piece (if any)
                 5. Keep the momentum positive
                 
-                Example: "Perfect! I've updated your manager information. 
-                Now just need your preferred contact email..."
+                Example: "Perfect! I've updated your start time. 
+                Now just need your end date..."
             """),
             expected_output="Positive acknowledgment with next steps",
             agent=agent,

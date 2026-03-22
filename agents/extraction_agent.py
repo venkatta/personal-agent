@@ -17,7 +17,7 @@ class ExtractionAgent:
             goal="Extract and organize all required information from user input for the leave form",
             backstory=dedent("""
                 You are an expert at parsing and extracting information from unstructured user input.
-                You can identify employee details, dates, reasons, and other information from casual
+                You can identify leave types, dates, times, and scheduling details from casual
                 conversation or semi-structured text. You maintain accuracy while being flexible
                 with different formats and writing styles.
             """),
@@ -33,17 +33,11 @@ class ExtractionAgent:
                 Extract all relevant information from the user's input to populate the leave form fields:
                 
                 Required fields to extract:
-                1. employee_id - Employee ID (e.g., EMP001, E-123)
-                2. employee_name - Full name of the employee
-                3. department - Department (Engineering, Sales, HR, Finance, Marketing, Operations, Other)
-                4. leave_type - Type of leave (Sick Leave, Casual Leave, Earned Leave, etc.)
-                5. start_date - Start date of leave
-                6. end_date - End date of leave
-                7. reason - Reason for the leave
-                8. contact_email - Email address for contact during leave
-                9. contact_phone - Phone number (optional)
-                10. manager_name - Name of the reporting manager
-                11. cover_details - Coverage or backup arrangements (optional)
+                1. leave_type - Type of leave (Sick Leave, Casual Leave, Earned Leave, etc.)
+                2. start_date - Start date of leave
+                3. start_time - Start time of leave
+                4. end_date - End date of leave
+                5. end_time - End time of leave
                 
                 For each field, provide:
                 - Extracted value
@@ -82,11 +76,8 @@ class ExtractionAgent:
                 Provide a clear summary of all extracted and entered form fields in a structured format.
                 
                 Present the information in a readable format:
-                - Employee Information (ID, Name, Department, Manager)
-                - Leave Details (Type, Start Date, End Date, Duration)
-                - Contact Information (Email, Phone)
-                - Leave Reason
-                - Coverage Arrangements
+                - Leave Details (Type, Start Date, Start Time, End Date, End Time)
+                - Validation Notes (if any field still needs attention)
                 
                 Highlight any fields that need attention or clarification.
             """),

@@ -153,17 +153,14 @@ class LeaveFormCrew:
     def get_form_summary(self) -> Dict[str, Any]:
         """Return the current form state as a summary"""
         return {
-            "employee_id": self.form_data.get('employee_id', ''),
-            "employee_name": self.form_data.get('employee_name', ''),
-            "department": self.form_data.get('department', ''),
             "leave_type": self.form_data.get('leave_type', ''),
             "start_date": self.form_data.get('start_date', ''),
+            "start_time": self.form_data.get('start_time', ''),
             "end_date": self.form_data.get('end_date', ''),
-            "reason": self.form_data.get('reason', ''),
-            "contact_email": self.form_data.get('contact_email', ''),
-            "contact_phone": self.form_data.get('contact_phone', ''),
-            "manager_name": self.form_data.get('manager_name', ''),
-            "cover_details": self.form_data.get('cover_details', ''),
+            "end_time": self.form_data.get('end_time', ''),
+            "full_day_leave": self.form_data.get('full_day_leave', ''),
+            "half_day_leave": self.form_data.get('half_day_leave', ''),
+            "validation_errors": self.validation_errors,
             "completion_percentage": self.completion_percentage,
             "missing_fields": self._get_missing_required_fields()
         }
@@ -195,13 +192,13 @@ class LeaveFormCrew:
 
     def _extract_content(self, user_input: str) -> Dict[str, Any]:
         """Step 2: Extract form fields from user input"""
-        from leave_form_assistant.tools import ContentExtractor
+        from tools import ContentExtractor
 
         return ContentExtractor.parse_form_text(user_input)
 
     def _validate_form(self) -> Dict[str, Any]:
         """Step 3: Validate all form data"""
-        from leave_form_assistant.tools import LeaveFormValidator
+        from tools import LeaveFormValidator
 
         is_valid, errors, warnings = LeaveFormValidator.validate_all_fields(self.form_data)
 
@@ -213,33 +210,23 @@ class LeaveFormCrew:
 
     def _should_validate(self) -> bool:
         """Check if form has enough data to validate"""
-        required_fields = ['employee_id', 'employee_name', 'contact_email']
+        required_fields = ['leave_type', 'start_date', 'start_time', 'end_date', 'end_time']
         return all(field in self.form_data for field in required_fields)
 
     def _is_form_complete(self) -> bool:
         """Check if all required fields are filled"""
-        required_fields = [
-            'employee_id', 'employee_name', 'department', 'leave_type',
-            'start_date', 'end_date', 'reason', 'contact_email', 'manager_name'
-        ]
+        required_fields = ['leave_type', 'start_date', 'start_time', 'end_date', 'end_time']
         return all(field in self.form_data for field in required_fields)
 
     def _calculate_completion(self) -> None:
         """Calculate form completion percentage"""
-        all_fields = [
-            'employee_id', 'employee_name', 'department', 'leave_type',
-            'start_date', 'end_date', 'reason', 'contact_email', 'contact_phone',
-            'manager_name', 'cover_details'
-        ]
+        all_fields = ['leave_type', 'start_date', 'start_time', 'end_date', 'end_time']
         filled_fields = sum(1 for field in all_fields if field in self.form_data)
         self.completion_percentage = round((filled_fields / len(all_fields)) * 100)
 
     def _get_missing_required_fields(self) -> list:
         """Get list of required fields that are still missing"""
-        required_fields = [
-            'employee_id', 'employee_name', 'department', 'leave_type',
-            'start_date', 'end_date', 'reason', 'contact_email', 'manager_name'
-        ]
+        required_fields = ['leave_type', 'start_date', 'start_time', 'end_date', 'end_time']
         return [field for field in required_fields if field not in self.form_data]
 
     def _generate_error_response(self) -> str:
@@ -262,15 +249,11 @@ class LeaveFormCrew:
         # Ask for first 1-2 missing fields
         for field in missing[:2]:
             field_labels = {
-                'employee_id': 'Your Employee ID',
-                'employee_name': 'Your Full Name',
-                'department': 'Your Department (Engineering, Sales, HR, Finance, Marketing, Operations, Other)',
-                'leave_type': 'Type of Leave (Sick, Casual, Earned, Maternity, Paternity, Unpaid, Bereavement)',
-                'start_date': 'Leave Start Date (format: DD-MM-YYYY)',
-                'end_date': 'Leave End Date (format: DD-MM-YYYY)',
-                'reason': 'Reason for your leave (at least 5 characters)',
-                'contact_email': 'Your Email Address',
-                'manager_name': 'Your Manager\'s Name'
+                'leave_type': 'Type of Leave (annual, medical, maternity, paternity, child_care, compassionate, exam, family_care, hospitalisation, national_service, extended_maternity, shared_parental, adoption_4_weeks, adoption_8_weeks, sick_leave_no_medical_certificate, special, time_off, unpaid_infant_care, unpaid_medical, unpaid_maternity, marriage, unpaid_leave, unpaid_hours)',
+                'start_date': 'Leave Start Date (format: DD-MM-YYYY or YYYY-MM-DD)',
+                'start_time': 'Leave Start Time (format: HH:MM or 9 AM)',
+                'end_date': 'Leave End Date (format: DD-MM-YYYY or YYYY-MM-DD)',
+                'end_time': 'Leave End Time (format: HH:MM or 5 PM)'
             }
             response += f"• {field_labels.get(field, field.replace('_', ' ').title())}\n"
 
@@ -284,22 +267,14 @@ class LeaveFormCrew:
 📋 LEAVE REQUEST FORM SUMMARY
 ════════════════════════════════════════
 
-👤 EMPLOYEE INFORMATION
-  • Employee ID: {employee_id}
-  • Full Name: {employee_name}
-  • Department: {department}
-  • Manager: {manager_name}
-
 📅 LEAVE DETAILS
   • Leave Type: {leave_type}
+  • Full Day Leave: {full_day_leave}
+  • Half Day Leave: {half_day_leave}
   • Start Date: {start_date}
+    • Start Time: {start_time}
   • End Date: {end_date}
-  • Reason: {reason}
-
-📞 CONTACT INFORMATION
-  • Email: {contact_email}
-  • Phone: {contact_phone}
-  • Coverage: {cover_details}
+    • End Time: {end_time}
 
 ✅ All information validated and complete!
 
@@ -364,17 +339,14 @@ Which would you like to do?
     def _generate_field_edit_acknowledgment(self, field_name: str, old_value: Any, new_value: Any) -> str:
         """Generate acknowledgment when field is edited"""
         field_labels = {
-            'employee_id': 'Employee ID',
-            'employee_name': 'Employee Name',
-            'department': 'Department',
             'leave_type': 'Leave Type',
             'start_date': 'Start Date',
+            'start_time': 'Start Time',
             'end_date': 'End Date',
-            'reason': 'Reason',
-            'contact_email': 'Email',
-            'contact_phone': 'Phone',
-            'manager_name': 'Manager Name',
-            'cover_details': 'Coverage Details'
+            'end_time': 'End Time',
+            'full_day_leave': 'Full Day Leave',
+            'half_day_leave': 'Half Day Leave',
+            'validation_errors': 'Validation Errors'
         }
         
         response = f"""
